@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../Estilos/pag_anuncio.css">
+
+    <title>Criação de Anúncio de Veículo</title>
+
+    <style>
+
+        .mensagem { 
+
+            padding: 10px; 
+
+            margin-bottom: 15px; 
+
+            border-radius: 5px; 
+
+            text-align: center; 
+
+        }
+
+        .sucesso { 
+
+            background-color: #d4edda; 
+
+            color: #155724; 
+
+        }
+
+        .erro { 
+
+            background-color: #f8d7da; 
+
+            color: #721c24; 
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+
+        <figure>
+
+            <a href="../index.php"><img src="../images/Logo.png" alt="Logo da Empresa" width="100" height="85"></a>
+
+        </figure>
+    </header>
+
+        <nav>
+
+            <a href="../index.php">Início</a>
+
+            <a href="listagem_anuncios.php">Meus Anúncios</a>
+
+        </nav>
+
+    <main>
+
+        <form id="formAnuncio" enctype="multipart/form-data">
+
+            <h1>Cadastro do Veículo</h1>
+
+
+
+            <div id="formMensagem"></div>
+
+
+
+            <p><label for="marca">Marca: <input type="text" placeholder="Digite a marca do veículo" id="marca" name="marca" required></label></p>
+
+            <p><label for="modelo">Modelo: <input type="text" placeholder="Digite o modelo do veículo" id="modelo" name="modelo" required></label></p>
+
+            <p><label for="ano">Ano de Fabricação: <input type="number" id="ano" name="ano" min="1900" max="2099" placeholder="Ex: 2023" required></label></p>
+
+            <p><label for="cor">Cor: <input type="text" placeholder="Digite a cor do veículo" id="cor" name="cor" required></label></p>
+
+            <p><label for="quilometragem">Quilometragem: <input type="number" placeholder="Ex: 50080" id="quilometragem" name="quilometragem" required></label></p>
+
+            <p>Descrição:</p>
+
+            <textarea name="descricao" rows="6" cols="60" placeholder="Digite uma descrição detalhada do veículo"></textarea>
+
+            <p><label for="valor">Valor (R$): <input type="number" step="0.01" placeholder="Ex: 75900.50" id="valor" name="valor" required></label></p>
+
+            <p><label for="estado">Estado: </label>
+
+                <select id="estado" name="estado" required>
+
+                    <option value="" selected disabled hidden>Selecione o Estado</option>
+
+                    <option value="AC">Acre</option>
+
+                    <option value="SP">São Paulo</option>
+
+                    <option value="MG">Minas Gerais</option>
+
+                    <option value="RJ">Rio de Janeiro</option>
+
+                </select>
+
+            </p>
+
+            <p><label for="cidade">Cidade: <input type="text" id="cidade" name="cidade" placeholder="Digite a cidade" required></label></p>
+
+            <p>Adicionar fotos (3 a 5): <input type="file" id="foto_veiculo" name="foto_veiculo[]" accept=".png, .jpg, .jpeg" multiple required></p>
+
+
+
+            <button type="submit" id="btnEnviar">Enviar Anúncio</button>
+
+        </form>
+
+    </main>
+
+    <footer>
+
+        <address>Av. Princesa Isabel 786 , Fundinho Elite - Uberlândia MG</address>
+
+        Copyright © 2025 Speed Cars Company - Todos os direitos reservados
+
+    </footer>
+
+
+
+    <script>
+
+        const form = document.getElementById('formAnuncio');
+
+        const btnEnviar = document.getElementById('btnEnviar');
+
+        const divMensagem = document.getElementById('formMensagem');
+
+
+
+        form.addEventListener('submit', async function (e) {
+
+            e.preventDefault();
+
+
+
+            const fotosInput = document.getElementById('foto_veiculo');
+
+            if (fotosInput.files.length < 3 || fotosInput.files.length > 5) {
+
+                exibeMensagem('Por favor, selecione de 3 a 5 imagens.', 'erro');
+
+                return;
+
+            }
+
+
+
+            const formData = new FormData(form);
+
+            btnEnviar.disabled = true;
+            btnEnviar.textContent = 'Enviando...';
+
+            divMensagem.innerHTML = '';
+
+
+
+            try {
+
+                const response = await fetch('controlador.php?acao=cadastrar', {
+
+                    method: 'POST',
+
+                    body: formData
+
+                });
+
+                
+
+                const resultado = await response.json();
+
+
+
+                if (!response.ok) {
+
+                    throw new Error(resultado.erro || 'Erro desconhecido no servidor.');
+
+                }
+
+                
+
+                exibeMensagem(resultado.mensagem, 'sucesso');
+
+                form.reset();
+
+
+
+                setTimeout(() => {
+
+                    window.location.href = 'listagem_anuncios.php';
+
+                }, 2000); 
+
+
+
+            } catch (error) {
+
+                exibeMensagem(error.message, 'erro');
+
+                btnEnviar.disabled = false;
+
+                btnEnviar.textContent = 'Enviar Anúncio';
+
+            }
+
+        });
+
+
+
+        function exibeMensagem(texto, tipo) {
+
+            divMensagem.className = `mensagem ${tipo}`;
+
+            divMensagem.textContent = texto;
+
+        }
+
+    </script>
+
+</body>
+
+</html>
