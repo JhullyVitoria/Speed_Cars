@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Cadastro de Usuário</title>
+    <link rel="stylesheet" href="../Estilos/pag_cadastro.css">
+</head>
+
+<body>
+    <header>
+        <figure>
+            <a href="../index.php"><img src="../images/Logo_branca.png" alt="Logo da Empresa" width="100" height="85"></a>
+        </figure>
+
+    </header>
+    <main>
+        <h2>Dados de Cadastro</h2>
+        <form action="controlador.php?acao=adicionarAnunciante" method="POST">
+            <fieldset>
+            <div>
+                <Label for="nome">Nome</Label>
+                <input type="text" name="nome" id="nome" placeholder="Nome" autofocus required>
+            </div>
+            <div>
+                <Label for="cpf">CPF</Label>
+                <input type="text" name="cpf" id="cpf" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}\" placeholder="000.000.000-00" required>
+            </div>
+            <div>
+                <Label for="email">E-mail</Label>
+                <input type="email" name="email" id="email" placeholder="E-mail" required>
+            </div>
+            <div>
+                <Label for="senha">Senha</Label>
+                <input type="password" name="senha" id="senha" placeholder="Senha" required>
+            </div>
+            <div>
+                <Label for="telefone">Telefone</Label>
+                <input type="tel" name="telefone" id="telefone" pattern="(\d{2}\)\s\d{5}-\d{4}" placeholder="(XX) XXXXX-XXXX" required>
+            </div>
+            <button type="submit">Enviar</button>
+        </fieldset>
+        </form>
+    </main>
+    <footer>
+        <address>
+            Av. Princesa Isabel 786 , Fundinho Elite - Uberlândia MG
+        </address>
+        Copyright © 2025 Speed Cars Company - Todos os direitos reservados
+
+    </footer>
+
+</body>
+
+</html>
