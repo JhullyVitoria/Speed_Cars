@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" href="../Estilos/login.css">
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <title>Login - Speed Cars</title>
+
+</head>
+
+
+
+<body>
+
+  <main class="caixaLogin">
+
+    <form id="formLogin" autocomplete="off">
+
+      <label for="email">Usuário:</label>
+
+      <div class="input-icon">
+
+        <span class="material-icons icon-label">person</span>
+
+        <input type="email" placeholder="teste@mail.com" id="email" name="email" required autofocus>
+
+      </div>
+
+
+
+      <label for="senha">Senha:</label>
+
+      <div class="input-icon">
+
+        <span class="material-icons icon-label">lock</span>
+
+        <input type="password" id="senha" name="senha" required>
+
+      </div>
+
+      <div class="input-icon">
+
+        <button type="submit" id="btnEntrar" class="input-icon">
+
+           Entrar
+
+        </button>
+
+      </div>
+
+      <div>
+
+        <p id="loginFailMsg" class="hidden"></p>
+
+      </div>
+
+    </form>
+
+    <section>
+
+      <div class="new_user">
+
+        <hr class="linha">
+
+        <span>Novo no Speed Cars ?</span>
+
+        <hr class="linha">
+
+      </div>
+
+      <button type="button" class="input-icon" onclick="window.location='../cadastro_anunciante/cadastro.html'">Cadastrar</button>
+
+      <a href="../index.php" class="btn-voltar-pequeno">Voltar</a>
+
+    </section>
+
+  </main>
+
+
+
+  <script>
+
+    async function sendForm(form) {
+
+
+
+      try {
+
+        const response = await fetch("controlador.php?acao=login", { method: 'post', body: new FormData(form) });
+
+        if (!response.ok) throw new Error(response.statusText);
+
+        const loginResult = await response.json();
+
+
+
+        if (loginResult.isAuthorized)
+
+          window.location = loginResult.newLocation;
+
+        else {
+
+          const parLoginFailMsg = document.querySelector("#loginFailMsg");
+
+          parLoginFailMsg.textContent = 'Dados incorretos. Por favor, tente novamente.';
+
+          parLoginFailMsg.classList.remove('hide');
+
+          form.senha.value = "";
+
+          form.senha.focus();
+
+        }
+
+      }
+
+      catch (e) {
+
+        const parLoginFailMsg = document.querySelector("#loginFailMsg");
+
+        parLoginFailMsg.textContent = 'Falha inesperada. Entre em contato o administrador do sistema.';
+
+        parLoginFailMsg.classList.remove('hide');
+
+      }
+
+    }
+
+
+
+    const meuForm = document.forms.formLogin;
+
+    meuForm.onsubmit = function (e) {
+
+      e.preventDefault();
+
+      sendForm(meuForm);
+
+    }
+
+
+
+  </script>
+
+</body>
+
+
+
+</html>
